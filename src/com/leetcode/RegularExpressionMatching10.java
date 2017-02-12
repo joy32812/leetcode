@@ -2,6 +2,8 @@ package com.leetcode;
 
 /**
  * Created by xiaoyuan on 12/02/2017.
+ *
+ * divide and conquer
  */
 public class RegularExpressionMatching10 {
 
