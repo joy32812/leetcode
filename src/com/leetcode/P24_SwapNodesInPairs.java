@@ -2,6 +2,7 @@ package com.leetcode;
 
 /**
  * Created by xiaoyuan on 19/02/2017.
+ * make a fake head first.
  */
 public class P24_SwapNodesInPairs {
 
