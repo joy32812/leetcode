@@ -6,19 +6,12 @@ package com.leetcode;
 public class P53_MaximumSubarray {
 
     public int maxSubArray(int[] nums) {
-        int result = Integer.MIN_VALUE;
+        int result = nums[0];
 
-        int tmp = 0;
-        for (int i = 0; i < nums.length;i++) {
-            tmp += nums[i];
-            result = Math.max(result, tmp);
-            if (tmp > result) {
-                result = tmp;
-            }
-
-            if (tmp < 0) {
-                tmp = 0;
-            }
+        int last = nums[0];
+        for (int i = 1; i < nums.length;i++) {
+            result = Math.max(result, nums[i] + (last > 0 ? last : 0));
+            last = nums[i] + (last > 0 ? last : 0);
         }
 
         return result;
