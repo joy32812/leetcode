@@ -7,7 +7,7 @@ import java.util.List;
  * Created by xiaoyuan on 27/02/2017.
  * Just search
  */
-public class P53_NQueens {
+public class P52_NQueensII {
 
     public void dfs(List<List<String>> result, int[] pos, int ind) {
         if (ind == pos.length) {
@@ -58,8 +58,12 @@ public class P53_NQueens {
         return result;
     }
 
+    public int totalNQueens(int n) {
+        return solveNQueens(n).size();
+    }
+
     public static void main(String[] args) {
-        System.out.println(new P53_NQueens().solveNQueens(10));
+        System.out.println(new P52_NQueensII().solveNQueens(10));
     }
 
 }
