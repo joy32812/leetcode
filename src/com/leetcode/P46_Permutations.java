@@ -1,6 +1,7 @@
 package com.leetcode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,11 +39,12 @@ public class P46_Permutations {
         if (nums.length == 0) {
             return new ArrayList<List<Integer>>();
         }
+        Arrays.sort(nums);
         return dfs(nums, 0);
     }
 
     public static void main(String[] args) {
-        int[] nums = {1, 2, 3};
+        int[] nums = {1, 1, 2};
         System.out.println(new P46_Permutations().permute(nums));
     }
 
