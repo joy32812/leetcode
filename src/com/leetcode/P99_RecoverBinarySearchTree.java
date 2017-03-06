@@ -12,13 +12,17 @@ public class P99_RecoverBinarySearchTree {
         TreeNode father;
         TreeNode now;
         boolean isLeft;
+        int cnt;
 
-        public NodeWrapper(TreeNode father, TreeNode now, boolean isLeft) {
+        public NodeWrapper(TreeNode father, TreeNode now, boolean isLeft, int cnt) {
             this.father = father;
             this.now = now;
             this.isLeft = isLeft;
+            this.cnt = cnt;
         }
     }
+
+    private int globleCnt;
 
     List<NodeWrapper> nodeWrappers;
     private NodeWrapper lastOne;
@@ -28,12 +32,14 @@ public class P99_RecoverBinarySearchTree {
             dfs(root.left, root, true);
         }
 
+        int nowCnt = globleCnt++;
         if (lastOne != null) {
             if (lastOne.now.val > root.val) {
                 nodeWrappers.add(lastOne);
+                nodeWrappers.add(new NodeWrapper(father, root, isLeft, nowCnt));
             }
         }
-        lastOne = new NodeWrapper(father, root, isLeft);
+        lastOne = new NodeWrapper(father, root, isLeft, nowCnt);
 
         if (root.right != null) {
             dfs(root.right, root, false);
@@ -42,11 +48,21 @@ public class P99_RecoverBinarySearchTree {
 
     public void recoverTree(TreeNode root) {
         nodeWrappers = new ArrayList<NodeWrapper>();
+        globleCnt = 0;
         dfs(root, null, false);
 
         for (NodeWrapper nodeWrapper: nodeWrappers) {
-            System.out.println(nodeWrapper.now.val);
+            System.out.println(nodeWrapper.now.val + "  " + nodeWrapper.isLeft + "  " + nodeWrapper.cnt);
         }
+
+        if (nodeWrappers.size() == 2) {
+            swap(nodeWrappers.get(0), nodeWrappers.get(1));
+        } else {
+            swap(nodeWrappers.get(0), nodeWrappers.get(3));
+        }
+    }
+
+    private void swap(NodeWrapper aa, NodeWrapper bb) {
     }
 
     public static void main(String[] args) {
