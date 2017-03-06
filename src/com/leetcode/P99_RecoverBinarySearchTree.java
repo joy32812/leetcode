@@ -5,6 +5,10 @@ import java.util.List;
 
 /**
  * Created by xiaoyuan on 06/03/2017.
+ *
+ * remember last node when you travese the tree
+ * find out the disorder ones
+ * then swap them
  */
 public class P99_RecoverBinarySearchTree {
 
@@ -63,6 +67,9 @@ public class P99_RecoverBinarySearchTree {
     }
 
     private void swap(NodeWrapper aa, NodeWrapper bb) {
+        int tmp = aa.now.val;
+        aa.now.val = bb.now.val;
+        bb.now.val = tmp;
     }
 
     public static void main(String[] args) {
@@ -90,9 +97,7 @@ public class P99_RecoverBinarySearchTree {
 
         new P99_RecoverBinarySearchTree().recoverTree(t1);
 
-        // FIXME  not finished
-        // TODO
-
+        System.out.println("H");
 
     }
 }
