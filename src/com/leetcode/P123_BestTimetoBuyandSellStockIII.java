@@ -17,11 +17,11 @@ public class P123_BestTimetoBuyandSellStockIII {
         int begin = 0;
         int max = 0;
         for (int i = 1; i < n; i++) {
-            if (prices[i] >= prices[i - 1]) {continue;}
-
             max = Math.max(max, prices[i - 1] - prices[begin]);
-            begin = i;
-            fromLeft[i] = max;
+            if (prices[begin] > prices[i]) {
+                begin = i;
+            }
+            fromLeft[i - 1] = max;
         }
 
         max = Math.max(max, prices[n - 1] - prices[begin]);
@@ -33,11 +33,11 @@ public class P123_BestTimetoBuyandSellStockIII {
         max = 0;
         fromRight[n - 1] = 0;
         for (int i = n - 2; i >= 0; i--) {
-            if (prices[i] <= prices[i + 1]) {continue;}
-
-            max = Math.max(max, prices[begin] - prices[i]);
-            begin = i;
-            fromRight[i] = max;
+            max = Math.max(max, prices[begin] - prices[i + 1]);
+            if (prices[begin] < prices[i]) {
+                begin = i;
+            }
+            fromRight[i + 1] = max;
         }
         max = Math.max(max, prices[begin] - prices[0]);
         fromRight[0] = max;
@@ -58,7 +58,7 @@ public class P123_BestTimetoBuyandSellStockIII {
     }
 
     public static void main(String[] args) {
-        System.out.println(new P123_BestTimetoBuyandSellStockIII().maxProfit(new int[]{1,2,3,5,9,1,100}));
+        System.out.println(new P123_BestTimetoBuyandSellStockIII().maxProfit(new int[]{1,2,4,2,5,7,2,4,9,0}));
     }
 
 }
