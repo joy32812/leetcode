@@ -50,6 +50,6 @@ public class P142_LinkedListCycleII {
         ListNode l1 = new ListNode(1);
         l1.next = l1;
 
-        System.out.println(new P142_LinkedListCycleII().hasCycle(l1));
+        System.out.println(new P142_LinkedListCycleII().detectCycle(l1));
     }
 }
