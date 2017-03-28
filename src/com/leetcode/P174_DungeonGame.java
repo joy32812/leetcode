@@ -13,6 +13,8 @@ public class P174_DungeonGame {
         int n = dungeon[0].length;
 
         int[][] dp = new int[m + 1][n + 1];
+        for (int i = 0; i <= m; i++) {dp[i][n] = Integer.MAX_VALUE;}
+        for (int i = 0; i <= n; i++) {dp[m][i] = Integer.MAX_VALUE;}
         dp[m][n - 1] = 1;
         dp[m - 1][n] = 1;
 
@@ -27,10 +29,13 @@ public class P174_DungeonGame {
     }
 
     public static void main(String[] args) {
+//        int[][] dungeon = {
+//                {1, -3, 3},
+//                {0, -2, 0},
+//                {-3, -3, -3}
+//        };
         int[][] dungeon = {
-                {1, -3, 3},
-                {0, -2, 0},
-                {-3, -3, -3}
+                {0, -3}
         };
 
         System.out.println(new P174_DungeonGame().calculateMinimumHP(dungeon));
