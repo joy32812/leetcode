@@ -1,6 +1,7 @@
 package com.leetcode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -86,6 +87,37 @@ public class P223_RectangleArea {
             return true;
         }
         return false;
+    }
+
+
+
+    // much easier solution
+    // find the coverX and coverY
+    int computeArea2(int A, int B, int C, int D, int E, int F, int G, int H) {
+        int area1 = (C - A) * (D - B);
+        int area2 = (G - E) * (H - F);
+
+        int coverX = getCover(A, C, E, G);
+        int coverY = getCover(B, D, F, H);
+
+        return area1 + area2 - coverX * coverY;
+    }
+
+    private int getCover(int A, int C, int E, int G) {
+        int cover = 0;
+        if (C <= E || G <= A) {
+            cover = 0;
+        } else {
+            int[] arr = new int[]{A, C, E, G};
+            Arrays.sort(arr);
+            cover = arr[2] - arr[1];
+        }
+        return cover;
+    }
+
+
+    public static void main(String[] args) {
+
     }
 
 }
