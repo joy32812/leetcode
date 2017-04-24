@@ -1,7 +1,6 @@
 package com.leetcode;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Created by xiaoyuan on 21/04/2017.
@@ -9,17 +8,29 @@ import java.util.TreeMap;
 public class P295_FindMedianfromDataStream {
 
 
-    /** initialize your data structure here. */
-    public P295_FindMedianfromDataStream() {
+    private PriorityQueue<Integer> large;
+    private PriorityQueue<Integer> small;
 
+    public P295_FindMedianfromDataStream() {
+        large = new PriorityQueue<>((a, b) -> (b - a));
+        small = new PriorityQueue<>((a, b) -> (a - b));
     }
 
     public void addNum(int num) {
+        small.add(num);
+        large.add(small.poll());
 
+        if (small.size() < large.size()) {
+            small.add(large.poll());
+        }
     }
 
     public double findMedian() {
-        return 0.0;
+        if (small.size() > large.size()) {
+            return small.peek();
+        } else {
+            return (small.peek() + large.peek()) / 2.0;
+        }
     }
 
     public static void main(String[] args) {
