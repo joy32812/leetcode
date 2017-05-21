@@ -1,35 +1,37 @@
 package com.leetcode;
 
+import java.util.PriorityQueue;
+
 /**
  * Created by xiaoyuan on 19/05/2017.
  */
 public class P378_KthSmallestElementinaSortedMatrix {
 
     public int kthSmallest(int[][] matrix, int k) {
-        int m = matrix.length - 1;
-        int n = matrix[0].length - 1;
+        int m = matrix.length;
+        int n = matrix[0].length;
 
-        int lx = 0, ly = 0;
-        int rx = m, ry = n;
-        while (true) {
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> (a[2] - b[2]));
 
-            if ((lx == rx || lx + 1 == rx) && (ly == ry | ly + 1 == ry)) {
+        for (int j = 0; j < n; j++) {pq.add(new int[]{0, j, matrix[0][j]});}
 
-            }
+        for (int i = 0; i < k - 1; i++) {
+            int[] tp = pq.poll();
 
-            int mx = (lx + rx) / 2;
-            int my = (ly + ry) / 2;
+            if (tp[0] == m - 1) {continue;}
 
-            int num = (mx + 1) * (my + 1);
-            if (num <= k) {
-                lx = mx;
-                ly = my;
-            } else {
-                rx = mx;
-                ry = my;
-            }
+            pq.add(new int[]{tp[0] + 1, tp[1], matrix[tp[0] + 1][tp[1]]});
         }
 
+        return pq.poll()[2];
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new P378_KthSmallestElementinaSortedMatrix().kthSmallest(new int[][]{
+                {1, 5, 9},
+                {10, 11, 13},
+                {12, 13, 15}
+        }, 3));
     }
 
 }
