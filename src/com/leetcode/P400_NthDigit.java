@@ -16,18 +16,16 @@ public class P400_NthDigit {
         int i = 1;
         int left = n;
         for (; ;i++) {
-            total += 9 * tens;
+            total += 9 * tens * i;
             if (total >= n) {break;}
-            left -= 9 * tens;
+            left -= 9 * tens * i;
             tens *= 10;
         }
 
-        System.out.println(i + "  " + left + "   " + tens);
         left--;
 
         long a = tens + (left / i);
         long b = left % i;
-        System.out.println("---->  " + a + "   " + b);
 
         List<Long> list = new ArrayList<>();
         while (a > 0) {
