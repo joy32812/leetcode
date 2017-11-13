@@ -1,9 +1,6 @@
 package com.leetcode;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Created by xiaoyuan on 13/11/2017.
