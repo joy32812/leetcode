@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Created by xiaoyuan on 10/12/2017.
  */
-public class A2 {
+public class P743_NetworkDelayTime {
 
     public int networkDelayTime(int[][] times, int N, int K) {
 
@@ -70,7 +70,7 @@ public class A2 {
 
     public static void main(String[] args) {
 
-        System.out.println(new A2().networkDelayTime(new int[][]{
+        System.out.println(new P743_NetworkDelayTime().networkDelayTime(new int[][]{
                 {4,2,76},
 {1,3,79},
 {3,1,81},

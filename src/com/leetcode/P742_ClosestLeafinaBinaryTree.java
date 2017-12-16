@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Created by xiaoyuan on 10/12/2017.
  */
-public class A3 {
+public class P742_ClosestLeafinaBinaryTree {
 
 
     Map<Integer, Set<Integer>> toMap;

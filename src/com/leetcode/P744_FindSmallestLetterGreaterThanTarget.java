@@ -3,7 +3,7 @@ package com.leetcode;
 /**
  * Created by xiaoyuan on 10/12/2017.
  */
-public class A1 {
+public class P744_FindSmallestLetterGreaterThanTarget {
 
     public char nextGreatestLetter(char[] letters, char target) {
 
