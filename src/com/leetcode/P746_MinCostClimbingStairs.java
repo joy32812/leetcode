@@ -2,7 +2,7 @@ package com.leetcode;
 
 import java.util.Arrays;
 
-public class A1 {
+public class P746_MinCostClimbingStairs {
 
 
 

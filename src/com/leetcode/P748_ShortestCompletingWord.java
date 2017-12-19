@@ -3,7 +3,7 @@ package com.leetcode;
 import java.util.HashMap;
 import java.util.Map;
 
-public class A2 {
+public class P748_ShortestCompletingWord {
 
 
     public String shortestCompletingWord(String licensePlate, String[] words) {
@@ -47,7 +47,7 @@ public class A2 {
 
     public static void main(String[] args) {
 
-        System.out.println(new A2().shortestCompletingWord("1s3 PSt", new String[]{
+        System.out.println(new P748_ShortestCompletingWord().shortestCompletingWord("1s3 PSt", new String[]{
                 "step","steps","stripe","stepple"
         }));
     }

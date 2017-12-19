@@ -1,6 +1,6 @@
 package com.leetcode;
 
-public class A3 {
+public class P750_NumberOfCornerRectangles {
 
 
     public int countCornerRectangles(int[][] grid) {
@@ -34,18 +34,18 @@ public class A3 {
 
     public static void main(String[] args) {
 
-        System.out.println(new A3().countCornerRectangles(new int[][]{
+        System.out.println(new P750_NumberOfCornerRectangles().countCornerRectangles(new int[][]{
                 {1, 0, 0, 1, 0},
                 {0, 0, 1, 0, 1},
                 {0, 0, 0, 1, 0},
                 {1, 0, 1, 0, 1}
         }));
 
-        System.out.println(new A3().countCornerRectangles(new int[][]{
+        System.out.println(new P750_NumberOfCornerRectangles().countCornerRectangles(new int[][]{
                 {1, 1, 1, 1},
         }));
 
-        System.out.println(new A3().countCornerRectangles(new int[][]{
+        System.out.println(new P750_NumberOfCornerRectangles().countCornerRectangles(new int[][]{
                 {1, 1, 1},
                 {1, 1, 1},
                 {1, 1, 1}

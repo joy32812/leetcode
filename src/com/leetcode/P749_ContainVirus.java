@@ -2,7 +2,7 @@ package com.leetcode;
 
 import java.util.*;
 
-public class A4 {
+public class P749_ContainVirus {
 
 
     int m;
@@ -188,7 +188,7 @@ public class A4 {
 //                {1, 1, 1},
 //        }));
 
-        System.out.println(new A4().containVirus(new int[][]{
+        System.out.println(new P749_ContainVirus().containVirus(new int[][]{
                 {1,1,1,0,0,0,0,0,0},
                 {1,0,1,0,1,1,1,1,1},
                 {1,1,1,0,0,0,0,0,0}
