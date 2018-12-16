@@ -4,9 +4,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AA2 {
+public class P957_PrisonCellsAfterNDays {
 
 
+    /**
+     * only 1 << 8 states
+     * so need to find the position where begin the loop
+     *
+     * Then we mod N by the loop length
+     * @param cells
+     * @param N
+     * @return
+     */
     public int[] prisonAfterNDays(int[] cells, int N) {
 
         Map<Integer, Integer> ansMap = new HashMap<>();
