@@ -2,9 +2,17 @@ package com.leetcode;
 
 import java.util.*;
 
-public class AA3 {
+public class P959_RegionsCutBySlashes {
 
 
+    /**
+     * for every cell, we divide it into 4 small cells
+     * then for '/' and '\' and ' ', connect them by edges
+     *
+     * then use bfs to find the connected parts
+     * @param grid
+     * @return
+     */
     public int regionsBySlashes(String[] grid) {
 
         int m = grid.length;
@@ -132,7 +140,7 @@ public class AA3 {
 
     public static void main(String[] args) {
 
-        System.out.println(new AA3().regionsBySlashes(new String[]{
+        System.out.println(new P959_RegionsCutBySlashes().regionsBySlashes(new String[]{
                 "\\/",
                 "/\\"
         }));
