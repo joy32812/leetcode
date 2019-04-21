@@ -61,7 +61,7 @@ class StreamChecker {
 
 }
 
-public class AA4 {
+public class P1032_StreamofCharacters {
 
     
 
