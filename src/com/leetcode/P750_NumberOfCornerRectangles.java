@@ -3,30 +3,31 @@ package com.leetcode;
 public class P750_NumberOfCornerRectangles {
 
 
+    /**
+     * count edges
+     * @param grid
+     * @return
+     */
     public int countCornerRectangles(int[][] grid) {
-
+        if (grid == null || grid.length == 0 || grid[0].length == 0) return 0;
+        int ans = 0;
 
         int m = grid.length;
         int n = grid[0].length;
 
-        int ans = 0;
-        int[][] dp = new int[n][n];
-
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                for (int k = j + 1; k < n; k++) {
-
-                    if (grid[i][j] == 1 && grid[i][k] == 1) dp[j][k]++;
-                }
-            }
-        }
 
         for (int j = 0; j < n; j++) {
             for (int k = j + 1; k < n; k++) {
-                int d = dp[j][k];
-                ans += d * (d - 1) /2;
+                int cnt = 0;
+
+                for (int i = 0; i < m; i++) {
+                    if (grid[i][j] == 1 && grid[i][k] == 1) cnt ++;
+                }
+
+                ans = cnt * (cnt - 1) / 2;
             }
         }
+
 
         return ans;
     }
