@@ -1,33 +1,32 @@
 package com.leetcode;
 
 
-import java.util.Arrays;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * Created by xiaoyuan on 13/04/2017.
  */
 public class P253_MeetingRoomsII {
 
-    public int minMeetingRooms(Interval[] intervals) {
-        Arrays.sort(intervals, (Interval a, Interval b) -> {
-            if (a.start == b.start) {
-                return a.end - b.end;
-            }
-            return a.start - b.start;
+    public int minMeetingRooms(int[][] intervals) {
+        List<int[]> points = new ArrayList<>();
+        for (int[] interval : intervals) {
+            points.add(new int[]{0, interval[0]});
+            points.add(new int[]{1, interval[1]});
+        }
+
+        points.sort((a, b) -> {
+            if (a[1] == b[1]) return - (a[0] - b[0]);
+            return a[1] - b[1];
         });
 
-        PriorityQueue<Integer> pq = new PriorityQueue<>((Integer a, Integer b) -> (a - b));
-
         int ans = 0;
-        for (int i = 0; i < intervals.length; i++) {
-            Interval b = intervals[i];
-            while (!pq.isEmpty() && pq.peek() <= b.start) {
-                pq.poll();
-            }
-            pq.add(b.end);
+        int now = 0;
+        for(int[] p : points) {
+            if (p[0] == 0) now++;
+            else now-- ;
 
-            ans = Math.max(ans, pq.size());
+            ans = Math.max(ans, now);
         }
 
         return ans;
@@ -35,15 +34,6 @@ public class P253_MeetingRoomsII {
 
     public static void main(String[] args) {
 
-        PriorityQueue<Integer> pq = new PriorityQueue<>((Integer a, Integer b) -> (a - b));
-        pq.add(1);
-        pq.add(3);
-        pq.add(9);
-        pq.add(3);
-
-        while (!pq.isEmpty()) {
-            System.out.println(pq.poll());
-        }
 
     }
 
