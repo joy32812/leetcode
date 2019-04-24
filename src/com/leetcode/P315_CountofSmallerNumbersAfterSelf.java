@@ -1,86 +1,51 @@
 package com.leetcode;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by xiaoyuan on 02/05/2017.
  */
 public class P315_CountofSmallerNumbersAfterSelf {
 
-    private class TNode {
-        int val;
-        int leftNum;
-        int cnt;
-
-        TNode left, right;
-
-        public TNode(int val, int leftNum, int cnt) {
-            this.val = val;
-            this.leftNum = leftNum;
-            this.cnt = cnt;
-        }
-    }
-
-    private TNode root;
-
+    int[] BIT;
     public List<Integer> countSmaller(int[] nums) {
-        if (nums == null || nums.length == 0) {return new ArrayList<>();}
-
-        int l = 0, r = nums.length - 1;
-        while (l < r) {
-            int tmp = nums[l];
-            nums[l] = nums[r];
-            nums[r] = tmp;
-            l++;
-            r--;
-        }
-
-
-        root = new TNode(nums[0], 0, 1);
         List<Integer> ans = new ArrayList<>();
-        ans.add(0);
+        if (nums == null || nums.length == 0) return ans;
 
-        for (int i = 1; i < nums.length; i++) {
-            ans.add(insert(root, nums[i]));
+        TreeSet<Integer> treeSet = new TreeSet<>();
+        for (int d : nums) treeSet.add(d);
+
+        Map<Integer, Integer> map = new HashMap<>();
+        int cnt = 0;
+        for (int d : treeSet) map.put(d, ++cnt);
+        for (int i = 0; i < nums.length; i++) nums[i] = map.get(nums[i]);
+
+        BIT = new int[treeSet.size() + 1];
+
+        for (int i = nums.length - 1; i >= 0; i--) {
+            ans.add(find(nums[i] - 1));
+            insert(nums[i]);
         }
 
-
-        l = 0;
-        r = ans.size() - 1;
-        while (l < r) {
-            int tmp = ans.get(l);
-            ans.set(l, ans.get(r));
-            ans.set(r, tmp);
-
-            l++;
-            r--;
-        }
+        Collections.reverse(ans);
 
         return ans;
     }
 
-    private int insert(TNode root, int num) {
-
-        if (root.val > num) {
-            root.leftNum ++;
-
-            if (root.left == null) {
-                root.left = new TNode(num, 0, 1);
-                return 0;
-            }
-            return insert(root.left, num);
-        } else if (root.val == num){
-            root.cnt ++;
-            return root.leftNum;
-        } else {
-            if (root.right == null) {
-                root.right = new TNode(num, 0, 1);
-                return root.leftNum + 1 + root.cnt - 1;
-            }
-
-            return root.leftNum + 1 + (root.cnt - 1) + insert(root.right, num);
+    private void insert(int d) {
+        while (d < BIT.length) {
+            BIT[d]++;
+            d += d & -d;
         }
+    }
+
+    private Integer find(int d) {
+        int ans = 0;
+        while (d > 0) {
+            ans += BIT[d];
+            d -= d & -d;
+        }
+        return ans;
     }
 
 
