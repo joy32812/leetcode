@@ -7,57 +7,50 @@ import java.util.List;
 /**
  * Created by xiaoyuan on 18/04/2017.
  */
-public class P281_ZigzagIterator {
 
-    int round;
-    int now;
-    private LinkedList<List<Integer>> allList;
-    public P281_ZigzagIterator(List<Integer> v1, List<Integer> v2) {
-        allList = new LinkedList<>();
-        round = 0;
-        now = 0;
+public class ZigzagIterator {
 
-        if (v1.size() > 0) {allList.add(v1);}
-        if (v2.size() > 0) {allList.add(v2);}
+    List<Integer> A;
+    List<Integer> B;
+    int a;
+    int b;
+    int z;
+
+    public ZigzagIterator(List<Integer> v1, List<Integer> v2) {
+        A = v1;
+        B = v2;
+
+        a = 0;
+        b = 0;
+        z = 0;
     }
 
     public int next() {
-        int value = allList.get(now).get(round);
-        if (round == allList.get(now).size() - 1) {
-            allList.remove(now);
-            now--;
-        }
+        if (!hasNext()) return -1;
+        if (z == 0 && a == A.size()) z = 1;
+        if (z == 1 && b == B.size()) z = 0;
 
-        now++;
-        if (now >= allList.size()) {
-            now = 0;
-            round ++;
+        int val = -1;
+        if (z == 0) {
+            val = A.get(a);
+            a++;
+        } else {
+            val = B.get(b);
+            b++;
         }
+        z = 1 - z;
 
-        return value;
+        return val;
     }
 
     public boolean hasNext() {
-        return allList.size() > 0;
+        return !(a == A.size() && b == B.size());
     }
+}
+public class P281_ZigzagIterator {
 
 
     public static void main(String[] args) {
-        List<Integer> v1 = new ArrayList<>();
-        v1.add(1);
-        v1.add(2);
-
-        List<Integer> v2 = new ArrayList<>();
-        v2.add(3);
-        v2.add(4);
-        v2.add(5);
-        v2.add(6);
-
-        P281_ZigzagIterator obj = new P281_ZigzagIterator(v1, v2);
-        while (obj.hasNext()) {
-            int v = obj.next();
-            System.out.println(v);
-        }
 
     }
 
