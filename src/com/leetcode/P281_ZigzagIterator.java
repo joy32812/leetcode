@@ -8,7 +8,7 @@ import java.util.List;
  * Created by xiaoyuan on 18/04/2017.
  */
 
-public class ZigzagIterator {
+class ZigzagIterator {
 
     List<Integer> A;
     List<Integer> B;

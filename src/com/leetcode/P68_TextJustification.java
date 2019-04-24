@@ -9,68 +9,75 @@ import java.util.List;
 public class P68_TextJustification {
 
     public List<String> fullJustify(String[] words, int maxWidth) {
-        List<String> result = new ArrayList<String>();
 
-        int cnt = 0;
-        int pos = 0;
-        for (int i = 0; i < words.length; i++) {
-            int nowCnt = cnt + (cnt > 0 ? 1 : 0) + words[i].length();
-            if (nowCnt > maxWidth) {
-                int size = i - pos;
-
-                if (size == 1) {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(words[pos]);
-                    for (int j = 0; j < maxWidth - cnt; j++) {
-                        sb.append(" ");
-                    }
-
-                    result.add(sb.toString());
-                } else {
-                    int leftSpace = maxWidth - cnt;
-
-                    int base = leftSpace / (size - 1) + 1;
-                    int more = leftSpace % (size - 1);
-
-                    StringBuilder sb = new StringBuilder();
-                    for (int j = pos; j < i; j++) {
-                        sb.append(words[j]);
-
-                        if (j < i - 1) {
-                            for(int k = 0; k < base; k++) {
-                                sb.append(" ");
-                            }
-                            if (more > 0) {
-                                sb.append(" ");
-                                more --;
-                            }
-                        }
-                    }
-                    result.add(sb.toString());
-                }
-
-                cnt = words[i].length();
-                pos = i;
+        List<List<String>> lines = new ArrayList<>();
+        int num = -1;
+        List<String> oneLine = new ArrayList<>();
+        for (String w : words) {
+            if (num + 1 + w.length() > maxWidth) {
+                if (oneLine.size() > 0) lines.add(oneLine);
+                oneLine = new ArrayList<>();
+                oneLine.add(w);
+                num = w.length();
             } else {
-                cnt = nowCnt;
+                oneLine.add(w);
+                num += 1 + w.length();
             }
         }
+        if (oneLine.size() > 0) lines.add(oneLine);
 
-        StringBuilder sb = new StringBuilder();
-        for (int i = pos; i < words.length; i++) {
-            if (sb.length() > 0) {
-                sb.append(" ");
-            }
-            sb.append(words[i]);
+        List<String> ans = new ArrayList<>();
+        for (int i = 0; i < lines.size() - 1; i++) {
+            List<String> line = lines.get(i);
+            ans.add(createLine(line, maxWidth));
         }
-        for (int j = 0; j < maxWidth - cnt; j++) {
-            sb.append(" ");
-        }
-        result.add(sb.toString());
 
+        ans.add(lastLine(lines.get(lines.size() - 1), maxWidth));
 
-        return result;
+        return ans;
     }
+
+    private String lastLine(List<String> line, int width) {
+        int num = line.get(0).length();
+        StringBuilder sb = new StringBuilder(line.get(0));
+
+        for (int i = 1; i < line.size(); i++) {
+            sb.append(" ");
+            sb.append(line.get(i));
+            num += 1 + line.get(i).length();
+        }
+        for (int i = 0; i < (width - num); i++) sb.append(" ");
+
+        return sb.toString();
+    }
+
+    private String createLine(List<String> line, int width) {
+        int total = 0;
+        for (String w : line) total += w.length();
+        int spaceNum = width - total;
+
+        StringBuilder sb = new StringBuilder(line.get(0));
+        if (line.size() == 1) {
+            for (int i = 0; i < spaceNum; i++) sb.append(" ");
+            return sb.toString();
+        }
+
+        int avg = spaceNum / (line.size() - 1);
+        int remain = spaceNum % (line.size() - 1);
+
+        for (int i = 1; i < line.size(); i++) {
+            for (int j = 0; j < avg; j++) sb.append(" ");
+            if (remain > 0) {
+                sb.append(" ");
+                remain --;
+            }
+
+            sb.append(line.get(i));
+        }
+
+        return sb.toString();
+    }
+
 
     public static void main(String[] args) {
 //        String[] words = {"This", "is", "an", "example", "of", "text", "justification."};
