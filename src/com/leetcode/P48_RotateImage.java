@@ -6,19 +6,24 @@ package com.leetcode;
 public class P48_RotateImage {
 
     public void rotate(int[][] matrix) {
-        if (matrix.length == 0) {
-            return;
-        }
-        int[][] result = new int[matrix.length][matrix[0].length];
-        for (int i = 0; i < result.length; i++) {
-            for (int j = 0; j < result[0].length; j++) {
-                result[i][j] = matrix[matrix.length - j - 1][i];
+        if (matrix == null || matrix.length == 0) return;
+        int n = matrix.length;
+
+        // flip horizontally
+        for (int i = 0; i < n; i++) {
+            for (int j = 0, k = n - 1; j < k; j++, k--) {
+                int tmp = matrix[i][j];
+                matrix[i][j] = matrix[i][k];
+                matrix[i][k] = tmp;
             }
         }
 
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                matrix[i][j] = result[i][j];
+        // flip by diag
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; i + j < n; j++) {
+                int tmp = matrix[i][j];
+                matrix[i][j] = matrix[n - 1 - j][n - 1 - i];
+                matrix[n - 1 - j][n - 1 - i] = tmp;
             }
         }
     }
