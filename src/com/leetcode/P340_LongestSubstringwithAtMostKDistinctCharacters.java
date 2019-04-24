@@ -14,27 +14,23 @@ public class P340_LongestSubstringwithAtMostKDistinctCharacters {
         if (s == null || k == 0) {return 0;}
         if (s.length() <= k) {return s.length();}
 
-
         int ans = 0;
-        Set<Character> winSet = new HashSet<>();
-        Map<Character, Integer> posMap = new HashMap<>();
-        int l = 0;
-        for (int i = 0; i < s.length(); i++) {
-            if (!winSet.contains(s.charAt(i)) && winSet.size() >= k) {
-                for (int j = l; ; j++) {
-                    if (posMap.get(s.charAt(j)) == j) {
-                        winSet.remove(s.charAt(j));
-                        l = j + 1;
-                        break;
-                    }
-                }
+
+        int i = -1;
+        Map<Character, Integer> cntMap = new HashMap<>();
+        for (int j = 0; j < s.length(); j++) {
+            char ch = s.charAt(j);
+
+            cntMap.put(ch, cntMap.getOrDefault(ch, 0) + 1);
+            while (cntMap.size() > k) {
+                i ++;
+                char nowCh = s.charAt(i);
+                cntMap.put(nowCh, cntMap.getOrDefault(nowCh, 0) - 1);
+                if (cntMap.get(nowCh) == 0) cntMap.remove(nowCh);
             }
-            winSet.add(s.charAt(i));
 
-            ans = Math.max(ans, i - l + 1);
-            posMap.put(s.charAt(i), i);
+            ans = Math.max(ans, j - i);
         }
-
 
         return ans;
     }

@@ -10,7 +10,7 @@ public class P774_MinimizeMaxDistancetoGasStation {
      * @param K
      * @return
      */
-    public double minmaxGasDist(int[] stations, int K) {
+    public double minmaxGasDist2(int[] stations, int K) {
         if (stations == null || stations.length <= 1) return 0;
         Arrays.sort(stations);
 
@@ -36,6 +36,33 @@ public class P774_MinimizeMaxDistancetoGasStation {
         }
 
         return true;
+    }
+
+
+    /**
+     * dp
+     * @param stations
+     * @param K
+     * @return
+     */
+    public double minmaxGasDist(int[] stations, int K) {
+        if (stations == null || stations.length <= 1) return 0;
+        Arrays.sort(stations);
+        int n = stations.length;
+
+        double[][] dp = new double[n][K + 1];
+        for (int i = 0; i < n; i++) Arrays.fill(dp, 1e8 + 1);
+        for (int i = 0; i <= K; i++) dp[0][i] = 0;
+
+
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j <= K; j++) {
+
+            }
+        }
+
+
+        return 0.0;
     }
 
 }
