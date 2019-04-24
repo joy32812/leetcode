@@ -9,42 +9,49 @@ import java.util.Stack;
  */
 public class P394_DecodeString {
 
-    private Map<Integer, Integer> pairMap;
+    int[] pair;
     public String decodeString(String s) {
-        pairMap = new HashMap<>();
+
+        int n = s.length();
+        pair = new int[n];
+
         Stack<Integer> stack = new Stack<>();
         for (int i = 0; i < s.length(); i++) {
             char ch = s.charAt(i);
-            if (ch == '[') {
-                stack.add(i);
-            } else if (ch == ']') {
-                pairMap.put(stack.pop(), i);
+            if (ch == '[') stack.push(i);
+            else if (ch == ']') {
+                pair[stack.peek()] = i;
+                stack.pop();
             }
         }
 
-        return work(s, 0, s.length() - 1);
+        return dfs(s, 0, s.length() - 1);
+
     }
 
-    private String work(String s, int l, int r) {
+
+    private String dfs(String s, int l, int r) {
         StringBuilder sb = new StringBuilder();
 
-        int tmp = 0;
-
+        int number = 0;
         for (int i = l; i <= r; i++) {
             char ch = s.charAt(i);
-            if (Character.isDigit(ch)) {
-                tmp = tmp * 10 + ch - '0';
-            } else if (ch == '[') {
-                String subStr = work(s, i + 1, pairMap.get(i) - 1);
-                for (int j = 1; j <= tmp; j++) {sb.append(subStr);}
 
-                tmp = 0;
-                i = pairMap.get(i);
+            if (number == 0) {
+                if (Character.isLetter(ch)) sb.append(ch);
+                else if (Character.isDigit(ch)) number = number * 10 + (ch - '0');
             } else {
-                sb.append(ch);
-            }
+                if (Character.isDigit(ch)) number = number * 10 + (ch - '0');
+                else if (ch == '[') {
+                    String innerStr = dfs(s, i + 1, pair[i] - 1);
+                    for (int j = 0; j < number; j++) sb.append(innerStr);
 
+                    number = 0;
+                    i = pair[i];
+                }
+            }
         }
+
         return sb.toString();
     }
 
