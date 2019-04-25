@@ -1,44 +1,30 @@
 package com.leetcode;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by xiaoyuan on 09/05/2017.
  */
 public class P337_HouseRobberIII {
 
-    private class BTVal {
-        int robVal;
-        int noRobVal;
-
-        public BTVal(int robVal, int noRobVal) {
-            this.robVal = robVal;
-            this.noRobVal = noRobVal;
-        }
-    }
 
     public int rob(TreeNode root) {
-        if (root == null) {return 0;}
-
-        BTVal result = dfs(root);
-        return Math.max(result.robVal, result.noRobVal);
+        int[] val = dp(root);
+        return Math.max(val[0], val[1]);
     }
 
-    private BTVal dfs(TreeNode root) {
-        if (root.left == null && root.right == null) {
-            return new BTVal(root.val, 0);
-        }
+    private int[] dp(TreeNode root) {
+        if (root == null) return new int[]{0, 0};
 
-        if (root.left == null) {
-            BTVal right = dfs(root.right);
-            return new BTVal(root.val + right.noRobVal, Math.max(right.robVal, right.noRobVal));
-        } else if (root.right == null) {
-            BTVal left = dfs(root.left);
-            return new BTVal(root.val + left.noRobVal, Math.max(left.robVal, left.noRobVal));
-        } else {
-            BTVal left = dfs(root.left);
-            BTVal right = dfs(root.right);
-            return new BTVal(root.val + right.noRobVal + left.noRobVal, Math.max(left.robVal, left.noRobVal) + Math.max(right.robVal, right.noRobVal));
-        }
+        int[] left = dp(root.left);
+        int[] right = dp(root.right);
 
+        return new int[]{
+                Math.max(left[0], left[1]) + Math.max(right[0], right[1]),
+                root.val + left[0] + right[0]
+        };
     }
+
 
 }
