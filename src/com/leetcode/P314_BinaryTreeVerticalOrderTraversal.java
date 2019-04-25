@@ -7,60 +7,48 @@ import java.util.*;
  */
 public class P314_BinaryTreeVerticalOrderTraversal {
 
-    private int cnt;
-    private class DataNode {
-        int cnt;
-        int val;
-        int deepth;
-
-        public DataNode(int val, int deepth,int cnt) {
-            this.val = val;
-            this.deepth = deepth;
-            this.cnt = cnt;
-        }
-    }
-
-    private Map<Integer, List<DataNode>> ansMap;
-
     public List<List<Integer>> verticalOrder(TreeNode root) {
-        if (root == null) {
-            return new ArrayList<>();
-        }
-        cnt = 0;
-        ansMap = new TreeMap<>();
-        work(root, 0, 0);
+        if (root == null) return new ArrayList<>();
 
-        List<List<Integer>> ansList = new ArrayList<>();
-        for (List<DataNode> list : ansMap.values()){
-            list.sort((a, b) -> {
-                if (a.deepth == b.deepth) {
-                    return a.cnt - b.cnt;
+        Map<Integer, List<Integer>> ansMap = new HashMap<>();
+
+        Map<TreeNode, Integer> colMap = new HashMap<>();
+        Queue<TreeNode> Q = new LinkedList<>();
+        Q.add(root);
+        colMap.put(root, 0);
+        ansMap.computeIfAbsent(0, k -> new ArrayList<>()).add(root.val);
+
+        int from = 0;
+        int to = 0;
+        while (!Q.isEmpty()) {
+            int len = Q.size();
+
+            for (int i = 0; i < len; i++) {
+                TreeNode now = Q.poll();
+
+                if (now.left != null) {
+                    int col = colMap.get(now) - 1;
+                    from = Math.min(from, col);
+                    colMap.put(now.left, col);
+                    ansMap.computeIfAbsent(col, k -> new ArrayList<>()).add(now.left.val);
+                    Q.add(now.left);
                 }
-                return a.deepth - b.deepth;
-            });
 
-            List<Integer> intList = new ArrayList<>();
-            for (DataNode dn : list) {
-                intList.add(dn.val);
+                if (now.right != null) {
+                    int col = colMap.get(now) + 1;
+                    to = Math.max(to, col);
+
+                    colMap.put(now.right, col);
+                    ansMap.computeIfAbsent(col, k -> new ArrayList<>()).add(now.right.val);
+                    Q.add(now.right);
+                }
             }
-            ansList.add(intList);
-        }
-        return ansList;
-    }
-
-    private void work(TreeNode root, int w, int d) {
-        if (root == null) {return;}
-
-        List<DataNode> list = ansMap.get(w);
-        if (!ansMap.containsKey(w)) {
-            list = new ArrayList<>();
         }
 
-        list.add(new DataNode(root.val, d, ++cnt));
-        ansMap.put(w, list);
-
-        work(root.left, w - 1, d + 1);
-        work(root.right, w + 1, d + 1);
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int i = from; i <= to; i++) ans.add(ansMap.get(i));
+        return ans;
     }
+
 
 }
