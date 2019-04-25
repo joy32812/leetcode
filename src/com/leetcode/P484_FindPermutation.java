@@ -2,37 +2,39 @@ package com.leetcode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by xiaoyuan on 03/08/2017.
  */
 public class P484_FindPermutation {
 
+    /**
+     * use stack
+     * @param s
+     * @return
+     */
     public int[] findPermutation(String s) {
+        if (s == null || s.length() == 0) return new int[]{1};
 
-        List<Integer> ans = new ArrayList<>();
-        int now = 0;
+        int[] ans = new int[s.length() + 1];
+        Stack<Integer> stack = new Stack<>();
+        stack.push(1);
+        int now = 1;
 
-        int cnt = 0;
-        for (int i = 0; i <= s.length(); i++) {
-
-            cnt++;
-
-            if (i == s.length() || s.charAt(i) == 'I') {
-                now += cnt;
-                for (int j = now, k = 0; k < cnt; j--, k++) {
-                    ans.add(j);
-                }
-
-                cnt=0;
+        int ind = 0;
+        for (char ch : s.toCharArray()) {
+            if (ch == 'I') {
+                while (!stack.isEmpty()) ans[ind ++] = stack.pop();
+                stack.push(++ now);
+            } else {
+                stack.push(++ now);
             }
         }
 
-        int[] res = new int[ans.size()];
-        for (int i = 0; i < ans.size(); i++) {
-            res[i] = ans.get(i);
-        }
-        return res;
+        while (!stack.isEmpty()) ans[ind ++] = stack.pop();
+
+        return ans;
     }
 
     public static void main(String[] args) {
