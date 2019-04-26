@@ -10,36 +10,34 @@ import java.util.Set;
  */
 public class P288_UniqueWordAbbreviation {
 
-    private Map<String, Integer> abbrMap;
-    private Set<String> wordSet;
-
+    private Map<String, Set<String>> abbrMap;
     public P288_UniqueWordAbbreviation(String[] dictionary) {
         abbrMap = new HashMap<>();
-        wordSet = new HashSet<>();
         for (String w : dictionary) {
-            if (w.length() <= 2) {continue;}
-            String abbr = "" + w.charAt(0) + (w.length() - 2) + w.charAt(w.length() - 1);
+            String abbr = w;
+            if (w.length() > 2) abbr = "" + w.charAt(0) + (w.length() - 2) + w.charAt(w.length() - 1);
 
-            wordSet.add(w);
-            if (!abbrMap.containsKey(abbr)) {
-                abbrMap.put(abbr, 1);
-            } else {
-                abbrMap.put(abbr, abbrMap.get(abbr) + 1);
-            }
+            abbrMap.computeIfAbsent(abbr, k -> new HashSet<>()).add(w);
         }
     }
 
     public boolean isUnique(String word) {
-        if (word.length() <= 2) {return true;}
+        String abbr = word;
+        if (word.length() > 2) abbr = "" + word.charAt(0) + (word.length() - 2) + word.charAt(word.length() - 1);
+        if (!abbrMap.containsKey(abbr)) return true;
 
-        String abbr = "" + word.charAt(0) + (word.length() - 2) + word.charAt(word.length() - 1);
-        if (wordSet.contains(word)) {
-            if (abbrMap.get(abbr) == 1) {
-                return true;
-            }
-            return false;
-        }
+        return abbrMap.get(abbr).contains(word) && abbrMap.get(abbr).size() == 1;
 
-        return !abbrMap.containsKey(abbr);
+    }
+
+    public static void main(String[] args) {
+
+        P288_UniqueWordAbbreviation obj = new P288_UniqueWordAbbreviation(new String[]{"deer", "door", "cake", "card"});
+
+        System.out.println(obj.isUnique("dear"));
+        System.out.println(obj.isUnique("cart"));
+        System.out.println(obj.isUnique("cane"));
+        System.out.println(obj.isUnique("make"));
+
     }
 }

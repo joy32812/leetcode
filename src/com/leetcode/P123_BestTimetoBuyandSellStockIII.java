@@ -6,56 +6,58 @@ package com.leetcode;
 public class P123_BestTimetoBuyandSellStockIII {
 
     public int maxProfit(int[] prices) {
-        if (prices.length == 0) { return 0;}
-
+        if (prices == null || prices.length == 0) return 0;
         int n = prices.length;
 
-        int[] fromLeft = new int[n];
-        int[] fromRight = new int[n];
-
-        fromLeft[0] = 0;
-        int begin = 0;
-        int max = 0;
-        for (int i = 1; i < n; i++) {
-            max = Math.max(max, prices[i - 1] - prices[begin]);
-            if (prices[begin] > prices[i]) {
-                begin = i;
+        int[][] dp = new int[3][n];
+        for (int i = 1; i <= 2; i++) {
+            int tmpMax = -prices[0];
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = Math.max(dp[i][j - 1], prices[j] + tmpMax);
+                tmpMax = Math.max(tmpMax, dp[i - 1][j - 1] - prices[j]);
             }
-            fromLeft[i - 1] = max;
         }
 
-        max = Math.max(max, prices[n - 1] - prices[begin]);
-        fromLeft[n - 1] = max;
+        return Math.max(0, Math.max(dp[1][n - 1], dp[2][n - 1]));
+    }
 
-
-
-        begin = n - 1;
-        max = 0;
-        fromRight[n - 1] = 0;
-        for (int i = n - 2; i >= 0; i--) {
-            max = Math.max(max, prices[begin] - prices[i + 1]);
-            if (prices[begin] < prices[i]) {
-                begin = i;
-            }
-            fromRight[i + 1] = max;
-        }
-        max = Math.max(max, prices[begin] - prices[0]);
-        fromRight[0] = max;
-
+    public int maxProfit2(int[] prices) {
+        if (prices == null || prices.length == 0) return 0;
+        int n = prices.length;
 
         int ans = 0;
+        int[] sellMax = new int[n];
+        int min = Integer.MAX_VALUE;
         for (int i = 0; i < n; i++) {
-            ans = Math.max(ans, getValue(fromLeft, i) + getValue(fromRight, i + 1));
+            min = Math.min(min, prices[i]);
+            sellMax[i] = Math.max(sellMax[i], prices[i] - min);
         }
+
+
+
+        int[] buyMax = new int[n];
+        int max = Integer.MIN_VALUE;
+        for (int i = n - 1; i >= 0; i--) {
+            max = Math.max(max, prices[i]);
+            buyMax[i] = Math.max(buyMax[i], max - prices[i]);
+        }
+
+
+        int[] rightBuyMax = new int[n + 1];
+        max = Integer.MIN_VALUE;
+        for (int i = n - 1; i >= 0; i--) {
+            max = Math.max(max, buyMax[i]);
+            rightBuyMax[i] = max;
+        }
+
+        for (int i = 0; i < n; i++) {
+            ans = Math.max(ans, sellMax[i] + rightBuyMax[i + 1]);
+        }
+
 
         return ans;
     }
 
-    private int getValue(int[] arr, int i) {
-        if (i < 0 || i >= arr.length) {return 0;}
-
-        return arr[i];
-    }
 
     public static void main(String[] args) {
         System.out.println(new P123_BestTimetoBuyandSellStockIII().maxProfit(new int[]{1,2,4,2,5,7,2,4,9,0}));

@@ -6,37 +6,43 @@ package com.leetcode;
 public class P408_ValidWordAbbreviation {
 
     public boolean validWordAbbreviation(String word, String abbr) {
+        if (word == null && word == null) return true;
+        if (word == null || word == null) return false;
+        if (word.equals(abbr)) return true;
 
-        int a = 0;
-        int b = 0;
-        while (true) {
-            if (a == word.length() && b == abbr.length()) {return true;}
+        int i = 0;
+        int j = 0;
 
-            if (a == word.length() || b == abbr.length()) {break;}
+        while (i < word.length() && j < abbr.length()) {
+            if (Character.isDigit(abbr.charAt(j))) {
+                int val = getValue(abbr.substring(j));
+                int len = ("" + val).length();
+                if (val == 0) return false;
 
-            char chA = word.charAt(a);
-            char chB = abbr.charAt(b);
-
-            if (!Character.isDigit(chB)) {
-                if (chA != chB) {break;}
-                a++;
-                b++;
-                continue;
+                i += val;
+                j += len;
+            } else {
+                if (word.charAt(i) != abbr.charAt(j)) return false;
+                i ++;
+                j ++;
             }
-
-            if (Integer.parseInt("" + chB) == 0) {break;}
-
-            int tmp = 0;
-            while (Character.isDigit(chB)) {
-                tmp = tmp * 10 + Integer.parseInt("" + chB);
-                b++;
-                if (b == abbr.length()) {break;}
-                chB = abbr.charAt(b);
-            }
-            a += tmp;
         }
 
-        return false;
+        return i == word.length() && j == abbr.length();
+    }
+
+    private int getValue(String s) {
+        int now = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (!Character.isDigit(s.charAt(i))) return now;
+            now = now * 10 + (s.charAt(i) - '0');
+        }
+        return now;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new P408_ValidWordAbbreviation().validWordAbbreviation("internationalization", "i12iz4n"));
+//        System.out.println(Integer.parseInt(s));
     }
 
 }
