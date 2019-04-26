@@ -8,51 +8,20 @@ import java.util.Arrays;
 public class P280_WiggleSort {
 
     public void wiggleSort(int[] nums) {
+        boolean bigger = true;
+        for (int i = 1; i < nums.length; i++) {
+            if (bigger && nums[i] < nums[i - 1]) swap(nums, i - 1, i);
+            if (!bigger && nums[i] > nums[i - 1]) swap(nums, i - 1, i);
 
-        Arrays.sort(nums);
+            bigger = !bigger;
 
-        int n = nums.length;
-        int[] arr = new int[n];
-        for (int i = 0; i < n; i++) {
-            arr[getNewIndex(i, n)] = i;
         }
-
-
-        for (int i = 0; i < n; i++) {
-            if (arr[i] == -1) {continue;}
-
-            int begin = i;
-            int value = nums[i];
-            int x = i;
-            while (arr[x] != -1) {
-                if (arr[x] == begin) {break;}
-                nums[x] = nums[arr[x]];
-                int tmp = arr[x];
-                arr[x] = -1;
-                x = tmp;
-            }
-
-            nums[x] = value;
-            arr[x] = -1;
-        }
-
-        for (int i = 0; i < n; i++) {
-            System.out.println(nums[i]);
-        }
-
     }
 
-
-    private int getNewIndex(int x, int n) {
-        int half = n / 2;
-
-        if (x < half) {
-           return 2 * x;
-        } else if (x == half) {
-            return n - 1;
-        } else {
-            return (n - x) * 2 - 1;
-        }
+    private void swap(int[] nums, int x, int y) {
+        int tmp = nums[x];
+        nums[x] = nums[y];
+        nums[y] = tmp;
     }
 
     public static void main(String[] args) {
