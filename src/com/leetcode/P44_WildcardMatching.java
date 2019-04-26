@@ -1,6 +1,8 @@
 package com.leetcode;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by xiaoyuan on 26/02/2017.
@@ -12,54 +14,60 @@ import java.util.Date;
  */
 public class P44_WildcardMatching {
 
+    Map<String, Boolean> dpMap;
     public boolean isMatch(String s, String p) {
-        boolean[][] dp = new boolean[s.length() + 1][p.length() + 1];
-        dp[0][0] = true;
-
-        if (p.length() > 0) {
-            for (int i = 0; i < p.length(); i++) {
-                if (p.charAt(i) == '*') {
-                    dp[0][i + 1] = true;
-                } else {
-                    break;
-                }
-            }
+        if (s == null && p == null) return true;
+        if (s == null || p == null) return false;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < p.length(); i++) {
+            if (i - 1 == 0 && p.charAt(i - 1) == '*' && p.charAt(i) == '*') continue;
+            sb.append(p.charAt(i));
         }
 
-        for (int i = 1; i <= s.length(); i++) {
-            for (int j = 1; j <= p.length(); j++) {
-                if (dp[i][j]) {
-                    continue;
-                }
-                char sCh = s.charAt(i - 1);
-                char pCh = p.charAt(j - 1);
+        dpMap = new HashMap<>();
 
-                if (pCh == '?') {
-                    dp[i][j] = dp[i - 1][j - 1];
-                } else if (pCh == '*') {
-                    if (dp[i - 1][j - 1]) {
-                        for (int k = i; k <= s.length(); k++) {
-                            dp[k][j] = true;
-                        }
-                    }
-                    if (dp[i][j - 1]) {
-                        dp[i][j] = true;
-                    }
-                } else {
-                    if (sCh == pCh && dp[i - 1][j - 1]) {
-                        dp[i][j] = true;
-                    }
-                }
-            }
-        }
-
-        return dp[s.length()][p.length()];
+        return match(s, 0,  sb.toString(),0);
     }
 
+    private boolean match(String s, int a, String p, int b) {
+        String key = a + "_" + b;
+        if (dpMap.containsKey(key)) return dpMap.get(key);
+
+        if (a == s.length() && b == p.length()) {
+            dpMap.put(key, true);
+            return true;
+        }
+
+        if (a < s.length() && b < p.length() && s.charAt(a) == p.charAt(b)) {
+            boolean result = match(s, a + 1, p, b + 1);
+            dpMap.put(key, result);
+            return result;
+        }
+        if (b < p.length() && p.charAt(b) == '?') {
+            boolean result = match(s, a + 1, p, b + 1);
+            dpMap.put(key, result);
+            return result;
+        }
+
+        if (b < p.length() && p.charAt(b) == '*') {
+            for (int i = a; i <= s.length(); i++) {
+                if (match(s, i, p, b + 1)) {
+                    dpMap.put(key, true);
+                    return true;
+                }
+            }
+        }
+
+        dpMap.put(key, false);
+        return false;
+    }
+
+
     public static void main(String[] args) {
-        System.out.println(new P44_WildcardMatching().isMatch("aab", "c*a*b"));
-        System.out.println(new P44_WildcardMatching().isMatch("c", "*?*"));
-        System.out.println(new P44_WildcardMatching().isMatch("", "*"));
+        System.out.println(new P44_WildcardMatching().isMatch("aa", "*"));
+//        System.out.println(new P44_WildcardMatching().isMatch("aab", "c*a*b"));
+//        System.out.println(new P44_WildcardMatching().isMatch("c", "*?*"));
+//        System.out.println(new P44_WildcardMatching().isMatch("", "*"));
 //        System.out.println(new P44_WildcardMatching().isMatch("aa", "aa*"));
 //        System.out.println(new P44_WildcardMatching().isMatch("aa", "aa"));
 //        System.out.println(new P44_WildcardMatching().isMatch("aaa", "aa"));
