@@ -6,64 +6,60 @@ package com.leetcode;
 public class P640_SolvetheEquation {
 
     public String solveEquation(String equation) {
+        String[] split = equation.split("=");
+        int[] left = getValue(split[0]);
+        int[] right = getValue(split[1]);
 
-        String[] eqs = equation.replace(" ", "").split("=");
-        int[] left = getValue(eqs[0]);
-        int[] right = getValue(eqs[1]);
 
-        if (left[0] == right[0] && left[1] == right[1]) {
-            return "Infinite solutions";
-        }
-        if (left[0] == right[0] && left[1] != right[1]) {
+        int coeff = left[0] - right[0];
+        int val = right[1] - left[1];
+
+        if (coeff == 0) {
+            if (val == 0) return "Infinite solutions";
             return "No solution";
         }
 
-        return "x=" + (right[1] - left[1]) / (left[0] - right[0]);
+        return "x=" + (val / coeff);
     }
 
     private int[] getValue(String s) {
-        int a = 0;
-        int b = 0;
+        if (s.length() == 0) return new int[]{0, 0};
 
-        int i = 0;
-        while (i < s.length()) {
-            int j = i;
-            int flag = 1;
-            if (s.charAt(j) == '+') {
-                j++;
-            } else if (s.charAt(j) == '-') {
-                flag = -1;
-                j++;
-            }
-            int now = Integer.MAX_VALUE;
-            for (; j < s.length() && s.charAt(j) != '+' && s.charAt(j) != '-'; j++) {
-                if (s.charAt(j) == 'x') {
-                    break;
-                }
-                if (now == Integer.MAX_VALUE) {now = 0;}
-                now = now * 10 + (s.charAt(j) - '0');
+        int numX = 0;
+        int val = 0;
+
+        if (s.indexOf('+') >= 0) {
+            String[] sp = s.split("[+]");
+            for (String subs : sp) {
+                int[] now = getValue(subs);
+                numX += now[0];
+                val += now[1];
             }
 
-            if (j < s.length() && s.charAt(j) == 'x') {
-                if (now == Integer.MAX_VALUE) {now = 1;}
-                a += now * flag;
-                j++;
-            } else {
-                b += now * flag;
-            }
-
-            i = j;
+            return new int[]{numX, val};
         }
 
-        return new int[]{a, b};
+
+        if (s.indexOf("-") >= 0) {
+            String[] sp = s.split("[-]");
+            int[] now = getValue(sp[0]);
+            numX += now[0];
+            val += now[1];
+
+            for (int i = 1; i < sp.length; i++) {
+                now = getValue(sp[i]);
+                numX -= now[0];
+                val -= now[1];
+            }
+            return new int[]{numX, val};
+        }
+
+        if (s.charAt(s.length() - 1) == 'x') return new int[]{s.length() > 1 ? Integer.parseInt(s.substring(0, s.length() - 1)) : 1, 0};
+        return new int[]{0, Integer.parseInt(s)};
     }
 
 
     public static void main(String[] args) {
-        System.out.println(new P640_SolvetheEquation().solveEquation("0x=0"));
         System.out.println(new P640_SolvetheEquation().solveEquation("x+5-3+x=6+x-2"));
-        System.out.println(new P640_SolvetheEquation().solveEquation("x=x"));
-        System.out.println(new P640_SolvetheEquation().solveEquation("2x=x"));
-        System.out.println(new P640_SolvetheEquation().solveEquation("2x+3x-6x=x+2"));
     }
 }
