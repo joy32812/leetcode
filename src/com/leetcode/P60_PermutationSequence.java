@@ -36,7 +36,25 @@ public class P60_PermutationSequence {
         return res;
     }
 
+    public int permutaionNumber(String s) {
+        if (s.length() == 1) return 1;
+
+        int digit = Integer.parseInt("" + s.charAt(0));
+        int n = s.length();
+
+        int now = (digit - 1) * cnt[n - 1];
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i < s.length(); i++) {
+            if (s.charAt(i) - '0' > digit) sb.append(s.charAt(i) - '0' - 1);
+            else sb.append(s.charAt(i));
+        }
+        return now + permutaionNumber(sb.toString());
+    }
+
     public static void main(String[] args) {
+
+        System.out.println(new P60_PermutationSequence().permutaionNumber("213"));
+
         System.out.println(new P60_PermutationSequence().getPermutation(3, 1));
         System.out.println(new P60_PermutationSequence().getPermutation(3, 2));
         System.out.println(new P60_PermutationSequence().getPermutation(3, 3));

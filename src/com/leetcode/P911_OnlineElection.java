@@ -7,41 +7,28 @@ import java.util.TreeMap;
 class TopVotedCandidate {
 
     TreeMap<Integer, Integer> voteMap;
-
-    /**
-     * binary search
-     * or
-     * using TreeMap
-     * floor <=
-     * ceiling >=
-     * @param persons
-     * @param times
-     */
     public TopVotedCandidate(int[] persons, int[] times) {
         voteMap = new TreeMap<>();
+        int[] voteNums = new int[50010];
 
-        int n = persons.length;
-        int[] num = new int[n];
-
-        int current = -1;
-
-        for (int i = 0; i < n; i++) {
+        int current = 0;
+        for (int i = 0; i < persons.length; i++) {
             int p = persons[i];
             int t = times[i];
 
-            num[p] ++;
+            voteNums[p]++;
 
-            if (current == -1 || num[p] >= num[current]) current = p;
-            voteMap.put(t, current);
+            if (voteNums[p] >= voteNums[current]) {
+                current = p;
+                voteMap.put(t, p);
+            }
         }
     }
 
     public int q(int t) {
-        Map.Entry<Integer, Integer> entry = voteMap.floorEntry(t);
-        return entry.getValue();
+        Integer integer = voteMap.floorKey(t);
+        return voteMap.get(integer);
     }
-
-
 }
 
 public class P911_OnlineElection {
