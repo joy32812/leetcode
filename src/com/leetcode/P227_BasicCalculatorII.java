@@ -9,62 +9,41 @@ import java.util.List;
 public class P227_BasicCalculatorII {
 
     public int calculate(String s) {
-        s = s.replace(" ", "");
+        if (s == null || s.length() == 0) return 0;
+        return dfs(s.replaceAll(" ", ""));
+    }
 
-        int last = 0;
-        List<Integer> vals = new ArrayList<>();
+    private int dfs(String s) {
+        char[] ops = {'+', '-'};
+        for (char op : ops) {
+            if (s.indexOf(op) > 0) {
+                String[] split = s.split("[" + op + "]");
+                int ans = dfs(split[0]);
+                for (int i = 1; i < split.length; i++) {
+                    int val = dfs(split[i]);
 
-        int sign = 1;
-        // 1 add
-        // -1 sub
-        // 2 multiply
-        // 3 divide
-        for (int i = 0; i < s.length(); i++) {
-            char ch = s.charAt(i);
-            if (Character.isDigit(ch)) {
-                last = last * 10 + (ch - '0');
-            } else {
-                if (sign == 2) {
-                    int before = vals.get(vals.size() - 1);
-                    vals.set(vals.size() - 1, before * last);
-                } else if (sign == 3) {
-                    int before = vals.get(vals.size() - 1);
-                    vals.set(vals.size() - 1, before / last);
-                } else {
-                    vals.add(sign * last);
+                    if (op == '+') ans += val;
+                    else if (op == '-') ans -= val;
                 }
-                last = 0;
 
-                if (ch == '+') {
-                    sign = 1;
-                } else if (ch == '-') {
-                    sign = -1;
-                } else if (ch == '*') {
-                    sign = 2;
-                } else if (ch == '/') {
-                    sign = 3;
-                }
+                return ans;
             }
         }
 
-        if (sign == 2) {
-            int before = vals.get(vals.size() - 1);
-            vals.set(vals.size() - 1, before * last);
-        } else if (sign == 3) {
-            int before = vals.get(vals.size() - 1);
-            vals.set(vals.size() - 1, before / last);
-        } else {
-            vals.add(sign * last);
+        if (s.indexOf('*') == -1 && s.indexOf('/') == -1) return Integer.parseInt(s);
+
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) == '*') return dfs(s.substring(0, i)) * dfs(s.substring(i + 1));
+            if (s.charAt(i) == '/') return dfs(s.substring(0, i)) / dfs(s.substring(i + 1));
         }
 
-        int ans = 0;
-        for (int d : vals) {ans += d;}
-
-        return ans;
+        return 0;
     }
 
     public static void main(String[] args) {
-        System.out.println(new P227_BasicCalculatorII().calculate("3 + 5 / 2"));
+        System.out.println(new P227_BasicCalculatorII().calculate("2*5/3"));
+//        System.out.println(new P227_BasicCalculatorII().calculate("3 + 5 / 2"));
+//        System.out.println(new P227_BasicCalculatorII().calculate("1+2*5/3+6/4*2"));
     }
 
 }
