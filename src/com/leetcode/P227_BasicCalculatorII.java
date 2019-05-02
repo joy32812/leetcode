@@ -1,6 +1,8 @@
 package com.leetcode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -10,34 +12,50 @@ public class P227_BasicCalculatorII {
 
     public int calculate(String s) {
         if (s == null || s.length() == 0) return 0;
-        return dfs(s.replaceAll(" ", ""));
+
+        return compute(s.replaceAll(" ", ""));
     }
 
-    private int dfs(String s) {
-        char[] ops = {'+', '-'};
-        for (char op : ops) {
-            if (s.indexOf(op) > 0) {
-                String[] split = s.split("[" + op + "]");
-                int ans = dfs(split[0]);
-                for (int i = 1; i < split.length; i++) {
-                    int val = dfs(split[i]);
+    private int compute(String s) {
 
-                    if (op == '+') ans += val;
-                    else if (op == '-') ans -= val;
+        String[] ops = {"+", "-", "*/"};
+
+        LinkedList<Character> mulDivList = new LinkedList<>();
+        for (char ch : s.toCharArray()) {
+            if (ch == '*' || ch == '/') mulDivList.add(ch);
+        }
+
+
+        for (String op : ops) {
+            List<String> subList = parse(s, op);
+            if (subList.size() > 1) {
+                int ans = compute(subList.get(0));
+
+                for (int i = 1; i < subList.size(); i++) {
+                    int now = compute(subList.get(i));
+
+                    if (op.equals("+")) {
+                        ans += now;
+                    } else if (op.equals("-")) {
+                        ans -= now;
+                    } else {
+                        if (mulDivList.getFirst() == '*') ans *= now;
+                        else ans /= now;
+
+                        mulDivList.removeFirst();
+                    }
                 }
 
                 return ans;
             }
         }
 
-        if (s.indexOf('*') == -1 && s.indexOf('/') == -1) return Integer.parseInt(s);
+        return Integer.parseInt(s);
+    }
 
-        for (int i = s.length() - 1; i >= 0; i--) {
-            if (s.charAt(i) == '*') return dfs(s.substring(0, i)) * dfs(s.substring(i + 1));
-            if (s.charAt(i) == '/') return dfs(s.substring(0, i)) / dfs(s.substring(i + 1));
-        }
-
-        return 0;
+    private List<String> parse(String s, String op) {
+        String[] split = s.split("[" + op + "]");
+        return new ArrayList<>(Arrays.asList(split));
     }
 
     public static void main(String[] args) {
