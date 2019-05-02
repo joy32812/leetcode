@@ -20,38 +20,35 @@ public class P291_WordPatternII {
         pattern2wordMap = new HashMap<>();
         word2patternMap = new HashMap<>();
 
-        return ifMatch(pattern, 0, pattern.length() - 1, str, 0, str.length() - 1);
+        return ifMatch(pattern, 0, str, 0);
 
     }
 
-    private boolean ifMatch(String p, int pl, int pr, String s, int sl, int sr) {
-        if (pl > pr && sl > sr) {return true;}
-        if (pl > pr) {return false;}
-        if (sl > sr) {return false;}
+    private boolean ifMatch(String p, int pl, String s, int sl) {
+        if (pl >= p.length() && sl >= s.length()) return true;
+        if (pl >= p.length() || sl >= s.length()) return false;
+
 
         String key = "" + p.charAt(pl);
         if (pattern2wordMap.containsKey(key)) {
-            String now = pattern2wordMap.get(key);
-            if(sr + 1 - sl < now.length() || s.substring(sl, sr + 1).indexOf(now) != 0) {
-                return false;
-            };
+            String w = pattern2wordMap.get(key);
+            if (sl + w.length() > s.length() || !s.substring(sl, sl + w.length()).equals(w)) return false;
 
-            return ifMatch(p, pl + 1, pr, s, sl + now.length(), sr);
+            return ifMatch(p, pl + 1, s, sl + w.length());
         }
 
-        for (int i = sl; i <= sr; i++) {
-            String now = s.substring(sl, i + 1);
-            if (word2patternMap.containsKey(now)) {continue;}
 
+        for (int i = sl; i < s.length(); i++) {
+            String now = s.substring(sl, i + 1);
+            if (word2patternMap.containsKey(now)) continue;
 
             pattern2wordMap.put(key, now);
             word2patternMap.put(now, key);
 
-            if (ifMatch(p, pl + 1, pr, s, sl + now.length(), sr)) {return true;}
+            if (ifMatch(p, pl + 1, s, i + 1)) return true;
 
             pattern2wordMap.remove(key);
             word2patternMap.remove(now);
-
         }
 
 
