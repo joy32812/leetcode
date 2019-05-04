@@ -2,7 +2,7 @@ package com.leetcode;
 
 public class P796_RotateString {
 
-    public boolean rotateString(String A, String B) {
+    public boolean rotateString2(String A, String B) {
         if (A == null && B == null) return true;
         if (A == null || B == null) return false;
         if (A.length() != B.length()) return false;
@@ -17,6 +17,13 @@ public class P796_RotateString {
         }
 
         return false;
+    }
+
+    public boolean rotateString(String A, String B) {
+        if (A == null && B == null) return true;
+        if (A == null || B == null) return false;
+
+        return A.length() == B.length() && (A + A).contains(B);
     }
 
 }
