@@ -12,17 +12,45 @@ public class P361_BombEnemy {
         int m = grid.length;
         int n = grid[0].length;
 
-        int[][] left = getHorEnemy(grid, 0, n - 1, 1);
-        int[][] right = getHorEnemy(grid, n - 1, 0, -1);
-
-        int[][] up = getVerEnemy(grid, 0, m - 1, 1);
-        int[][] down = getVerEnemy(grid, m - 1, 0, -1);
-
         int ans = 0;
+        int[][] dp = new int[m][n];
+
+        // left
+        for (int i = 0; i < m; i++) {
+            for (int j = 0, num = 0; j < n; j++) {
+                dp[i][j] += grid[i][j] == 'W' ? num = 0 : (grid[i][j] == 'E' ? ++ num : num);
+            }
+        }
+
+        // right
+        for (int i = 0; i < m; i++) {
+            for (int j = n - 1, num = 0; j >= 0; j--) {
+                dp[i][j] += grid[i][j] == 'W' ? num = 0 : (grid[i][j] == 'E' ? ++ num : num);
+            }
+        }
+
+
+        // up
+        for (int j = 0; j < n; j++) {
+            for (int i = 0, num = 0; i < m; i++) {
+                dp[i][j] += grid[i][j] == 'W' ? num = 0 : (grid[i][j] == 'E' ? ++ num : num);
+            }
+        }
+
+        // down
+        for (int j = 0; j < n; j++) {
+            for (int i = m - 1, num = 0; i >= 0; i--) {
+                dp[i][j] += grid[i][j] == 'W' ? num = 0 : (grid[i][j] == 'E' ? ++ num : num);
+            }
+        }
+
+
+
+
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == '0') {
-                    ans = Math.max(ans, up[i][j] + down[i][j] + left[i][j] + right[i][j]);
+                    ans = Math.max(ans, dp[i][j]);
                 }
             }
         }
@@ -30,43 +58,6 @@ public class P361_BombEnemy {
         return ans;
     }
 
-    private int[][] getHorEnemy(char[][] grid, int fromY, int toY, int step) {
-        int[][] res = new int[grid.length][grid[0].length];
-
-        for (int i = 0; i < grid.length; i++) {
-            int now = 0;
-            for (int j = fromY; ; j += step) {
-                if (step < 0 && j < toY) {break;}
-                if (step > 0 && j > toY) {break;}
-                res[i][j] = now;
-                if (grid[i][j] == 'W') {
-                    now = 0;
-                } else if (grid[i][j] == 'E') {
-                    now++;
-                }
-            }
-        }
-        return res;
-    }
-
-    private int[][] getVerEnemy(char[][] grid, int fromX, int toX, int step) {
-        int[][] res = new int[grid.length][grid[0].length];
-
-        for (int j = 0; j < grid[0].length; j++) {
-            int now = 0;
-            for (int i = fromX; ; i += step) {
-                if (step < 0 && i < toX) {break;}
-                if (step > 0 && i > toX) {break;}
-                res[i][j] = now;
-                if (grid[i][j] == 'W') {
-                    now = 0;
-                } else if (grid[i][j] == 'E') {
-                    now++;
-                }
-            }
-        }
-        return res;
-    }
 
 
 }
