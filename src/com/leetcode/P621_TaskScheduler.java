@@ -13,46 +13,18 @@ public class P621_TaskScheduler {
     public int leastInterval(char[] tasks, int n) {
         if (n == 0) {return tasks.length;}
 
-        int[] posArr = new int[26];
-        int[][] charAndNum = new int[26][2];
-        for (char ch : tasks) {
-            charAndNum[ch - 'A'][0] = ch - 'A';
-            charAndNum[ch - 'A'][1]++;
+        int[] cnt = new int[26];
+        for (char ch : tasks) cnt[ch - 'A'] ++;
+        Arrays.sort(cnt);
+
+        int maxVal = cnt[25] - 1;
+        int slotNum = maxVal * n;
+
+        for (int i = 24; i >= 0; i--) {
+            slotNum -= Math.min(maxVal, cnt[i]);
         }
 
-        Arrays.fill(posArr, -1);
-        int cnt = 0;
-        while (true) {
-            Arrays.sort(charAndNum, new Comparator<int[]>() {
-                @Override
-                public int compare(int[] o1, int[] o2) {
-                    return -(o1[1] - o2[1]);
-                }
-            });
-
-            if (charAndNum[0][1] == 0) {break;}
-
-            boolean find = false;
-            for (int i = 0; i < 26; i++) {
-                int task = charAndNum[i][0];
-                if (charAndNum[i][1] == 0) {break;}
-
-                if (posArr[task] == -1 || cnt - posArr[task] >= n) {
-                    cnt++;
-                    charAndNum[i][1]--;
-                    find = true;
-                    posArr[task] = cnt;
-                    break;
-                }
-            }
-
-            if (!find) {
-                cnt++;
-            }
-        }
-
-
-        return cnt;
+        return slotNum > 0 ? slotNum + tasks.length : tasks.length;
     }
 
     public static void main(String[] args) {
