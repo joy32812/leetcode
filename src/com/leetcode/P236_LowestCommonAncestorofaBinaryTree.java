@@ -5,34 +5,17 @@ package com.leetcode;
  */
 public class P236_LowestCommonAncestorofaBinaryTree {
 
-    private TreeNode ans;
-
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        dfs(root, p, q);
+        if (root == p || root == q || root == null) return root;
 
-        return ans;
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+        if (left != null && right != null) return root;
+        return left != null ? left : right;
     }
 
-    private int dfs(TreeNode root, TreeNode p, TreeNode q) {
-        if (root == null) {return 0;}
 
-        int leftNum = dfs(root.left, p, q);
-        int rightNum = dfs(root.right, p, q);
-
-        if (ans == null && leftNum == 1 && rightNum == 1) {
-            ans = root;
-        }
-        if (ans == null && (root == p || root == q) && leftNum + rightNum == 1) {
-            ans = root;
-        }
-
-        int now = 0;
-        if (root == p || root == q) {
-            now = 1;
-        }
-
-        return leftNum + rightNum + now;
-    }
 
     public static void main(String[] args) {
 
