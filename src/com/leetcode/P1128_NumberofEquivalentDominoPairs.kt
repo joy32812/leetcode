@@ -10,11 +10,9 @@ fun numEquivDominoPairs(dominoes: Array<IntArray>): Int {
         map.put(key, map.getOrDefault(key, 0) + 1)
     }
 
-    var ans = 0;
-    for ((_, n) in map) {
-        ans += n * (n - 1) / 2
-    }
 
+    var ans = 0;
+    map.values.forEach {ans += it * (it - 1) / 2}
     return ans
 }
 
