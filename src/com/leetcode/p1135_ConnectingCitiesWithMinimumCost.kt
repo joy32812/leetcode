@@ -32,7 +32,7 @@ fun minimumCost(N: Int, connections: Array<IntArray>): Int {
     return -1
 }
 
-fun getFather(father: MutableMap<Int, Int>, x: Int): Int = if (father[x] == x) x else getFather(father, father[x]!!)
+private fun getFather(father: MutableMap<Int, Int>, x: Int): Int = if (father[x] == x) x else getFather(father, father[x]!!)
 
 
 fun main() {
