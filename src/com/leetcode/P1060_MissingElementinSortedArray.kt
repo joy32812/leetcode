@@ -5,7 +5,6 @@ package com.leetcode
  * O(N)
  */
 fun missingElement2(nums: IntArray, k: Int): Int {
-
     val rangeList = mutableListOf<IntArray>()
 
     for (i in 1 until nums.size) {
@@ -29,7 +28,6 @@ fun missingElement2(nums: IntArray, k: Int): Int {
  * O(lgN)
  */
 fun missingElement(nums: IntArray, k: Int): Int {
-
     var l = 0
     var r = nums.size - 1
 
@@ -42,5 +40,4 @@ fun missingElement(nums: IntArray, k: Int): Int {
     }
 
     return nums[l] + k - (nums[l] - nums[0] - 1 - (l - 1))
-
 }
