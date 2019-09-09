@@ -7,12 +7,6 @@ import java.util.List;
  * Created by xiaoyuan on 16/02/2017.
  */
 
-class ListNode {
-    int val;
-    ListNode next;
-    ListNode(int x) { val = x; }
-}
-
 public class RemoveNthNodeFromEndofList19 {
 
     public ListNode removeNthFromEnd(ListNode head, int n) {
