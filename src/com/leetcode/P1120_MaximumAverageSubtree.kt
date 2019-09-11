@@ -1,13 +1,7 @@
 package com.leetcode
 
 
-class TreeNode(var `val`: Int) {
-    var left: TreeNode? = null
-    var right: TreeNode? = null
-}
-
 private data class Result(val sum: Int, val num: Int)
-
 var ans: Double = 0.0
 fun maximumAverageSubtree(root: TreeNode?): Double {
 
