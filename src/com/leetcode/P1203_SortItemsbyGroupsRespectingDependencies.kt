@@ -15,10 +15,8 @@ fun sortItems(n: Int, m: Int, group: IntArray, beforeItems: List<List<Int>>): In
     }
 
     val g2item = group.withIndex().groupBy { it.value }.mapValues { it.value.map { it.index }.toSet() }
-
     val groupEdges = mutableSetOf<Pair<Int, Int>>()
     val itemEdgeMap = mutableMapOf<Int, MutableSet<Pair<Int, Int>>>()
-
 
     // edge
     for (i in beforeItems.indices) {
@@ -74,7 +72,6 @@ fun sortItems(n: Int, m: Int, group: IntArray, beforeItems: List<List<Int>>): In
         ans.addAll(now)
     }
 
-    println(ans)
     if (ans.size != n) return intArrayOf()
     return ans.toIntArray()
 }
@@ -88,14 +85,4 @@ fun main() {
             listOf()
     )))
 
-//    println(sortItems(8, 2, intArrayOf(-1,-1,1,0,0,1,0,-1), listOf(
-//            listOf(),
-//            listOf(6),
-//            listOf(5),
-//            listOf(6),
-//            listOf(3, 6),
-//            listOf(),
-//            listOf(),
-//            listOf()
-//    )))
 }
