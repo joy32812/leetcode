@@ -4,87 +4,98 @@ import java.util.*
 
 
 /**
- * TODO
+ * Two Level TopSort
  */
+
 fun sortItems(n: Int, m: Int, group: IntArray, beforeItems: List<List<Int>>): IntArray {
 
-    val inDeg = Array(n) {0}
-    val inGroup = Array(m) {0}
+    var M = m
+    for (i in group.indices) {
+        if (group[i] == -1) group[i] = M++
+    }
 
-    val edgeMap = mutableMapOf<Int, HashSet<Int>>()
+    val g2item = group.withIndex().groupBy { it.value }.mapValues { it.value.map { it.index }.toSet() }
 
-    val gy = group.withIndex().groupBy { it.value }.mapValues { it.value.map { it.index }.toMutableSet() }
-    val groupEdgeMap = mutableMapOf<Int, HashSet<Int>>()
+    val groupEdges = mutableSetOf<Pair<Int, Int>>()
+    val itemEdgeMap = mutableMapOf<Int, MutableSet<Pair<Int, Int>>>()
 
 
+    // edge
     for (i in beforeItems.indices) {
         for (j in beforeItems[i]) {
-            inDeg[i] ++
-            edgeMap.computeIfAbsent(j) {HashSet()}.add(i)
 
-            if (group[i] == -1 || group[j] == -1 || group[i] == group[j]) continue
-            val jSet = groupEdgeMap.computeIfAbsent(group[j]) {HashSet()}
-            if (group[i] !in jSet) {
-                jSet += group[i]
-                inGroup[group[i]]++
+            val gi = group[i]
+            val gj = group[j]
+
+            if (gi == gj) itemEdgeMap.computeIfAbsent(gi) { mutableSetOf()}.add(Pair(j, i))
+            else groupEdges.add(Pair(gj, gi))
+        }
+    }
+
+    fun topSort(edges: Set<Pair<Int, Int>>, rangeSet: Set<Int>): List<Int> {
+        val ans = mutableListOf<Int>()
+
+        val edgeMap = mutableMapOf<Int, MutableSet<Int>>()
+        val inDegMap = mutableMapOf<Int, Int>()
+
+        for ((s, t) in edges) {
+            edgeMap.computeIfAbsent(s) { mutableSetOf()}.add(t)
+            inDegMap[t] = (inDegMap[t] ?: 0) + 1
+        }
+
+        val Q = LinkedList<Int>()
+        for (i in rangeSet) {
+            if ((inDegMap[i] ?: 0) == 0) Q += i
+        }
+
+        while (!Q.isEmpty()) {
+            val s = Q.poll()
+            ans += s
+
+            val edges = edgeMap.computeIfAbsent(s) { mutableSetOf()}
+            for (t in edges) {
+                inDegMap[t] = (inDegMap[t] ?: 0) - 1
+
+                if (inDegMap[t] == 0) Q += t
             }
         }
+
+        if (ans.size != rangeSet.size) return listOf()
+        return ans
     }
 
-    val Q = LinkedList<Int>()
-    for (i in 0 until n) {
-        if (inDeg[i] == 0 && (group[i] == -1 || inGroup[group[i]] == 0)) {
-            Q += i
-        }
-    }
-    if (Q.isEmpty()) return intArrayOf()
+    val groupOrder = topSort(groupEdges, (0 until M).toSet())
+    if (groupOrder.isEmpty()) return intArrayOf()
 
     val ans = mutableListOf<Int>()
-
-    while (!Q.isEmpty()) {
-        val s = Q.poll()
-        ans += s
-
-        val g = group[s]
-        val gSet = gy[g]!!
-        gSet.remove(s)
-
-        val candidateSet = mutableSetOf<Int>()
-
-        if (g != -1 && gSet.isEmpty()) {
-            val groupEdge = groupEdgeMap.computeIfAbsent(g) {HashSet()}
-            for (gt in groupEdge) {
-                inGroup[gt]--
-
-                candidateSet.addAll(gy[gt]!!)
-            }
-        }
-
-
-        val edge = edgeMap.computeIfAbsent(s) {HashSet()}
-        for (t in edge) {
-            inDeg[t] --
-
-            if (inDeg[t] == 0) candidateSet.add(t)
-        }
-
-
+    for (i in groupOrder) {
+        val now = topSort(itemEdgeMap[i] ?: setOf(), g2item[i] ?: setOf())
+        if (now.size != (g2item[i] ?: setOf()).size) return intArrayOf()
+        ans.addAll(now)
     }
 
+    println(ans)
     if (ans.size != n) return intArrayOf()
     return ans.toIntArray()
 }
 
 fun main() {
-
-    println(sortItems(8, 3, intArrayOf(-1,-1,1,0,0,1,0,-1), listOf(
-            listOf(),
-            listOf(6),
-            listOf(5),
-            listOf(6),
-            listOf(3, 6),
+    println(sortItems(5, 5, intArrayOf(2, 0, -1, 3, 0), listOf(
+            listOf(2, 1, 3),
+            listOf(2, 4),
             listOf(),
             listOf(),
             listOf()
     )))
+
+//    println(sortItems(8, 2, intArrayOf(-1,-1,1,0,0,1,0,-1), listOf(
+//            listOf(),
+//            listOf(6),
+//            listOf(5),
+//            listOf(6),
+//            listOf(3, 6),
+//            listOf(),
+//            listOf(),
+//            listOf()
+//    )))
 }
