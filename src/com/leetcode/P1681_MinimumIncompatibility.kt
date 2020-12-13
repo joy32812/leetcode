@@ -1,5 +1,8 @@
 package com.leetcode
 
+/**
+ * backtracking
+ */
 fun minimumIncompatibility(nums: IntArray, k: Int): Int {
 
     val n = nums.size

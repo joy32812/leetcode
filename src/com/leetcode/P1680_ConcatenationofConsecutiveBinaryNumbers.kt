@@ -1,5 +1,8 @@
 package com.leetcode
 
+/**
+ * brute force
+ */
 fun concatenatedBinary(n: Int): Int {
 
     val MOD = 1_000_000_000 + 7
