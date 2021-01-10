@@ -1,5 +1,8 @@
 package com.leetcode
 
+/**
+ * Binary Search
+ */
 fun waysToSplit(nums: IntArray): Int {
     val MOD = 1_000_000_000 + 7L
 

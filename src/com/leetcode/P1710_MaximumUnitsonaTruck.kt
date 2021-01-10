@@ -1,5 +1,8 @@
 package com.leetcode
 
+/**
+ * easy
+ */
 fun maximumUnits(boxTypes: Array<IntArray>, truckSize: Int): Int {
     boxTypes.sortByDescending { it[1] }
     var ans = 0

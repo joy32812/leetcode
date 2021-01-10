@@ -1,5 +1,8 @@
 package com.leetcode
 
+/**
+ * HashMap count
+ */
 fun countPairs(deliciousness: IntArray): Int {
     val MOD = 1_000_000_000 + 7L
 
