@@ -1,5 +1,3 @@
-@file:JvmName("P1763_LongestNiceSubstringKt")
-
 package com.leetcode
 
 fun canChoose(groups: Array<IntArray>, nums: IntArray): Boolean {
